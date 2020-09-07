@@ -37,13 +37,13 @@ loss_weight = {
 TRACKER_WARMUP = 30 
 EPOC_BATCHES = TOTAL_FILES // BATCH_SIZE
 loss_stats = {'G':  LossTracker("G", experiment, 
-                                weight=loss_weight["G"], max=max_loss["G"], 
+                                weight=loss_weight["G"], max_loss=max_loss["G"], 
                                 block_size=EPOC_BATCHES, warmup=TRACKER_WARMUP),       
               'D':  LossTracker("D", experiment, 
-                                weight=loss_weight["D"], max=max_loss["D"], 
+                                weight=loss_weight["D"], max_loss=max_loss["D"], 
                                 block_size=EPOC_BATCHES, warmup=TRACKER_WARMUP),
               'E':  LossTracker("E", experiment, 
-                                weight=loss_weight["E"], max=max_loss["AE"], 
+                                weight=loss_weight["E"], max_loss=max_loss["AE"], 
                                 block_size=EPOC_BATCHES, warmup=TRACKER_WARMUP)}
 ```
 
