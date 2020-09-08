@@ -1,17 +1,17 @@
 # Multi-Loss Weighting with Coefficient of Variations
 
-Unofficial Implementation of [Multi-Loss Weighting with Coefficient of Variations](https://arxiv.org/pdf/2009.01717.pdf) - 
+Unofficial Implementation of [Multi-Loss Weighting with Coefficient of Variations](https://arxiv.org/pdf/2009.01717.pdf) -
 credit goes to the authors **Rick Groenendijk**, **Sezer Karaoglu**, **Theo Gevers**, and **Thomas Mensink** for the easy to understand paper that
 addressed an issue that I have recently been facing as I become more comfortable with creating custom loss functions and learning how different architectures
-respond to them. The core idea presented is to keep track of a specific set of metrics for each loss and then use one of them to start dynamically weighing 
-each loss in real time (after each minibatch update). This is specifically a strategy for multiple losses applied to a single objective - *not* multi-task 
-learning (which is where the majority of this sort of research is focused on). 
+respond to them. The core idea presented is to keep track of a specific set of metrics for each loss and then use one of them to start dynamically weighing
+each loss in real time (after each minibatch update). This is specifically a strategy for multiple losses applied to a single objective - *not* multi-task
+learning (which is where the majority of this sort of research is focused on).
 
 ## Current Implementation
 
 No reference code was released with the paper, so this code is completely written from scratch as I interpreted the paper. Since I already had started using an
 abstraction around 'tracking' my loss values as to centralize the responsibility of updating any related metrics to each loss and to consolidate the logging
-functionality that is almost always part of trackng loss values and their relatede metrics. This initial implementation was made for PyTorch and Comet.ml - 
+functionality that is almost always part of trackng loss values and their relatede metrics. This initial implementation was made for PyTorch and Comet.ml -
 but it is only a few lines to change it to work for any other deep learning library. As time permits, I will update this repo to include a generic version
 along with implementaions for at least TensorFlow 2.x and MXNet.
 
