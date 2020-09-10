@@ -68,8 +68,10 @@ class LossTracker:
         self.max_history_size += self.block_size        
     
     def update(self, value, do_backwards=True, do_comet=True, do_console=False):
-        if do_backwards:
-            value = self.constrain_loss(value)
+        value = self.scale_loss(value)
+        value = self.adjust_loss(value)
+        value = self.constrain_loss(value)
+        if do_backwards:            
             value.backward()
             self.value = value.item()
         else:
@@ -112,8 +114,15 @@ class LossTracker:
     def get_history(self):
         return self.value_history[:self.count]
 
-    def constrain_loss(self, loss):
+    def scale_loss(self, loss):
+        loss *= self.ratio
+        return loss
+
+    def adjust_loss(self, loss):
         loss *= self.weight
+        return loss
+
+    def constrain_loss(self, loss):                
         if loss > self.max:
             magnitude = torch.floor(loss / self.max)
             loss = loss / min(magnitude, 1)
