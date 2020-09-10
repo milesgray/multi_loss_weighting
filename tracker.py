@@ -63,8 +63,8 @@ class LossTracker:
         if block_size is not None:
             self.block_size = block_size
 
-        self.value_history = np.concat(self.value_history, np.empty(self.block_size))
-        self.ratio_history = np.concat(self.ratio_history, np.empty(self.block_size))
+        self.value_history = np.concatenate(self.value_history, np.empty(self.block_size))
+        self.ratio_history = np.concatenate(self.ratio_history, np.empty(self.block_size))
         self.max_history_size += self.block_size        
     
     def update(self, value, do_backwards=True, do_comet=True, do_console=False):
