@@ -77,9 +77,9 @@ class LossTracker:
         value = self.constrain_loss(value)
         if do_backwards:            
             value.backward()
-            self.value = value.item()
-        else:
-            self.value = value
+            
+        self.value = value.item()
+        
         self.total += self.value   
         assert self.count < self.max_history_size
         self.value_history[self.count] = self.value
