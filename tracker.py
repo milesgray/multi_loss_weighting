@@ -35,13 +35,14 @@ import torch
 import numpy as np
 
 class LossTracker:
-    def __init__(self, name, experiment, weight=1, warmup=np.inf, max_loss=np.inf, block_size=100):
+    def __init__(self, name, experiment, weight=1, warmup=np.inf, max_loss=np.inf, block_size=100, use_scaling=False):
         self.name = name
         self.exp = experiment
         self.weight = weight
         self.max = max_loss
         self.warmup = warmup
         self.block_size = block_size
+        self.use_scaling = use_scaling
         self.reset()
 
     def reset(self):
@@ -68,7 +69,7 @@ class LossTracker:
         self.max_history_size += self.block_size        
     
     def update(self, value, do_backwards=True, do_comet=True, do_console=False):
-        value = self.scale_loss(value)
+        if self.use_scaling: value = self.scale_loss(value)
         value = self.adjust_loss(value)
         value = self.constrain_loss(value)
         if do_backwards:            
