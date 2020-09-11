@@ -35,7 +35,9 @@ import torch
 import numpy as np
 
 class LossTracker:
-    def __init__(self, name, experiment, weight=1, warmup=np.inf, max_loss=np.inf, block_size=100, use_scaling=False):
+    def __init__(self, name, experiment, weight=1, warmup=np.inf, 
+                 max_loss=np.inf, block_size=100, 
+                 use_cov_weight=False, use_scaling=False):
         self.name = name
         self.exp = experiment
         self.weight = weight
@@ -43,6 +45,7 @@ class LossTracker:
         self.warmup = warmup
         self.block_size = block_size
         self.use_scaling = use_scaling
+        self.use_cov_weight = use_cov_weight
         self.reset()
 
     def reset(self):
@@ -69,7 +72,7 @@ class LossTracker:
         self.max_history_size += self.block_size        
     
     def update(self, value, do_backwards=True, do_comet=True, do_console=False):
-        if self.use_scaling: value = self.scale_loss(value)
+        if self.use_scaling and self.count > self.warmup: value = self.scale_loss(value)
         value = self.adjust_loss(value)
         value = self.constrain_loss(value)
         if do_backwards:            
@@ -90,7 +93,7 @@ class LossTracker:
         if self.count > 1:  # only once there is a history          
             self.ratio_std = self.ratio_history.std() # σli(t) is the standard deviation over all known loss ratios Li(t)/µli(t−1) until iteration t - 1        
             self.cov_weight = self.ratio_std / self.ratio # αi = σli(t) / li(t)
-        if self.count > self.warmup:
+        if self.use_cov_weight and self.count > self.warmup:
             # use cov weight as functioning weight after warmup period to allow for meaningful statistics to build
             self.weight = self.cov_weight        
         self.mean = self.value_history[:self.count].mean()
